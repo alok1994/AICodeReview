@@ -21,7 +21,7 @@ def analyze_code_with_codex(diff):
     #     max_tokens=150  # Adjust as needed
     # )
     response = {'choices': [{'message': {'content': 'Mocked response: Code review completed successfully.'}}]}
-    return response.choices[0].message['content']
+    return response['choices'][0]['message']['content']
 
 def post_review_comment(repo, pr_number, comment):
     """Posts the Codex review comment to the PR on GitHub."""
