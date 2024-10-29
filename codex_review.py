@@ -12,17 +12,15 @@ def fetch_pr_diff(pr_url):
     return response.text if response.status_code == 200 else None
 
 def analyze_code_with_codex(diff):
-    """Analyzes code diff with OpenAI Codex."""
-    prompt = f"Review the following code changes and suggest improvements or fixes:\n\n{diff}"
-    response = openai.Completion.create(
-        engine="text-davinci-003",
-        prompt=prompt,
-        temperature=0.3,
-        max_tokens=500,
-        n=1,
-        stop=None,
+    response = openai.ChatCompletion.create(
+        model="gpt-3.5-turbo",
+        messages=[
+            {"role": "system", "content": "You are a code review assistant."},
+            {"role": "user", "content": f"Please review the following code:\n{diff}"}
+        ],
+        max_tokens=150  # Adjust as needed
     )
-    return response.choices[0].text.strip()
+    return response.choices[0].message['content']
 
 def post_review_comment(repo, pr_number, comment):
     """Posts the Codex review comment to the PR on GitHub."""
