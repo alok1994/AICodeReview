@@ -23,15 +23,21 @@ def analyze_code_with_codex(diff):
     response = {'choices': [{'message': {'content': 'Mocked response: Code review completed successfully.'}}]}
     return response['choices'][0]['message']['content']
 
-def post_review_comment(repo, pr_number, comment):
-    """Posts the Codex review comment to the PR on GitHub."""
+
+def post_review_comment(pr_number, review_comment):
+    github_token = os.getenv("GIT_TOKEN")
+    repo = os.getenv("GITHUB_REPOSITORY")  # e.g., "username/repo-name"
     url = f"https://api.github.com/repos/{repo}/issues/{pr_number}/comments"
     headers = {
-        "Authorization": f"token {os.getenv('GITHUB_TOKEN')}",
-        "Accept": "application/vnd.github.v3+json",
+        "Authorization": f"Bearer {github_token}",
+        "Accept": "application/vnd.github.v3+json"
     }
-    data = {"body": comment}
-    requests.post(url, headers=headers, json=data)
+    data = {"body": review_comment}
+    response = requests.post(url, headers=headers, json=data)
+    if response.status_code == 201:
+        print("Review comment posted successfully.")
+    else:
+        print("Failed to post review comment:", response.json())
 
 # Main execution
 pr_url = os.getenv("PR_URL")
