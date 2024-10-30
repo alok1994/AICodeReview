@@ -1,45 +1,32 @@
-import openai
-import os
 import requests
-
-# Set up OpenAI API
-openai.api_key = os.getenv("OPENAI_API_KEY")
-
-def fetch_pr_diff(pr_url):
-    """Fetches the diff for a specific PR URL."""
-    headers = {"Accept": "application/vnd.github.v3.diff"}
-    response = requests.get(pr_url, headers=headers)
-    return response.text if response.status_code == 200 else None
+import os
 
 def analyze_code_with_codex(diff):
-    # response = openai.ChatCompletion.create(
-    #     model="gpt-3.5-turbo",
-    #     messages=[
-    #         {"role": "system", "content": "You are a code review assistant."},
-    #         {"role": "user", "content": f"Please review the following code:\n{diff}"}
-    #     ],
-    #     max_tokens=150  # Adjust as needed
-    # )
-    response = {'choices': [{'message': {'content': 'Mocked response: Code review completed successfully.'}}]}
+    # Mocked response to simulate API call
+    response = {
+        'choices': [{'message': {'content': 'Mocked response: Code review completed successfully.'}}]
+    }
     return response['choices'][0]['message']['content']
 
-def post_review_comment(repo, pr_number, comment):
-    """Posts the Codex review comment to the PR on GitHub."""
+def post_review_comment(pr_number, review_comment):
+    github_token = os.getenv("PAT_TOKEN")
+    print(github_token)
+    repo = os.getenv("GITHUB_REPOSITORY")  # e.g., "username/repo-name"
+    print(repo)
     url = f"https://api.github.com/repos/{repo}/issues/{pr_number}/comments"
     headers = {
-        "Authorization": f"token {os.getenv('GITHUB_TOKEN')}",
-        "Accept": "application/vnd.github.v3+json",
+        "Authorization": f"Bearer {github_token}",
+        "Accept": "application/vnd.github.v3+json"
     }
-    data = {"body": comment}
-    requests.post(url, headers=headers, json=data)
+    data = {"body": review_comment}
+    response = requests.post(url, headers=headers, json=data)
+    if response.status_code == 201:
+        print("Review comment posted successfully.")
+    else:
+        print("Failed to post review comment:", response.json())
 
-# Main execution
-pr_url = os.getenv("PR_URL")
-repo = os.getenv("GITHUB_REPOSITORY")
-pr_number = os.getenv("PR_NUMBER")
-
-diff = fetch_pr_diff(pr_url)
-if diff:
+if __name__ == "__main__":
+    diff = "Example diff text here"  # Replace this with actual diff text if applicable
     review_comment = analyze_code_with_codex(diff)
-    post_review_comment(repo, pr_number, review_comment)
-
+    pr_number = os.getenv("PR_NUMBER")  # Get the PR number from environment variable
+    post_review_comment(pr_number, review_comment)
