@@ -1,12 +1,23 @@
 import requests
 import os
+import openai
 
 def analyze_code_with_codex(diff):
-    # Mocked response to simulate API call
-    response = {
-        'choices': [{'message': {'content': 'Mocked response: Code review completed successfully.'}}]
-    }
-    return response['choices'][0]['message']['content']
+    # # Mocked response to simulate API call
+    # response = {
+    #     'choices': [{'message': {'content': 'Mocked response: Code review completed successfully.'}}]
+    # }
+    # return response['choices'][0]['message']['content']
+
+    response = openai.ChatCompletion.create(
+        model="gpt-3.5-turbo",
+        messages=[
+            {"role": "system", "content": "You are a code review assistant."},
+            {"role": "user", "content": f"Please review the following code:\n{diff}"}
+        ],
+        max_tokens=150  # Adjust as needed
+    )
+    return response.choices[0].message['content']
 
 def post_review_comment(pr_number, review_comment):
     github_token = os.getenv("PAT_TOKEN")
