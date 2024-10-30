@@ -28,5 +28,5 @@ def post_review_comment(pr_number, review_comment):
 if __name__ == "__main__":
     diff = "Example diff text here"  # Replace this with actual diff text if applicable
     review_comment = analyze_code_with_codex(diff)
-    pr_number = os.getenv("PR_NUMBER")  # Get the PR number from environment variable
+    pr_number = os.getenv("PR_NUMBER")  
     post_review_comment(pr_number, review_comment)
