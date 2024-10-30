@@ -33,13 +33,10 @@ def post_review_comment(repo, pr_number, comment):
     data = {"body": comment}
     requests.post(url, headers=headers, json=data)
 
-# Main execution
-pr_url = os.getenv("PR_URL")
-repo = os.getenv("GITHUB_REPOSITORY")
-pr_number = os.getenv("PR_NUMBER")
 
-diff = fetch_pr_diff(pr_url)
-if diff:
+if __name__ == "__main__":
+    diff = "Example diff text here"  # Replace this with actual diff text if applicable
     review_comment = analyze_code_with_codex(diff)
-    post_review_comment(repo, pr_number, review_comment)
+    pr_number = os.getenv("PR_NUMBER")  # Get the PR number from environment variable
+    post_review_comment(pr_number, review_comment)
 
