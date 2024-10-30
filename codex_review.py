@@ -10,7 +10,9 @@ def analyze_code_with_codex(diff):
 
 def post_review_comment(pr_number, review_comment):
     github_token = os.getenv("GIT_TOKEN")
+    print(github_token)
     repo = os.getenv("GITHUB_REPOSITORY")  # e.g., "username/repo-name"
+    print(repo)
     url = f"https://api.github.com/repos/{repo}/issues/{pr_number}/comments"
     headers = {
         "Authorization": f"Bearer {github_token}",
