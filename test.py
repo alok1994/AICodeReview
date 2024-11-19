@@ -9,5 +9,8 @@ Class B(A):
         self.secondName = secondName
         A.__init__(self, firstName)
 
+    def printFirstSecondName(self):
+        print("First and Second Name:", self.firstName, self.secondName)
+
 a = A()
 a.printName()
