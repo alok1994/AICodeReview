@@ -1,12 +1,35 @@
 import requests
 import os
+import openai
+
+openai.api_key = os.getenv("OPENAI_API_KEY")
+
+def fetch_pr_diff(pr_url):
+    """Fetches the diff for a specific PR URL."""
+    headers = {"Accept": "application/vnd.github.v3.diff"}
+    response = requests.get(pr_url, headers=headers)
+    return response.text if response.status_code == 200 else None
 
 def analyze_code_with_codex(diff):
-    # Mocked response to simulate API call
-    response = {
-        'choices': [{'message': {'content': 'Mocked response: Code review completed successfully.'}}]
-    }
-    return response['choices'][0]['message']['content']
+    """Analyzes code diff with the latest OpenAI model."""
+    prompt = f"Review the following code changes and suggest improvements or fixes:\n\n{diff}"
+    response = openai.ChatCompletion.create(
+        model="gpt-4–1106-preview",
+        messages=[
+            {"role": "system", "content": "You are an expert code reviewer."},
+            {"role": "user", "content": prompt}
+        ],
+        temperature=0.3,
+        max_tokens=500,
+    )
+    return response['choices'][0]['message']['content'].strip()
+    
+# def analyze_code_with_codex(diff):
+#     # Mocked response to simulate API call
+#     response = {
+#         'choices': [{'message': {'content': 'Mocked response: Code review completed successfully.'}}]
+#     }
+#     return response['choices'][0]['message']['content']
 
 def post_review_comment(pr_number, review_comment):
     github_token = os.getenv("PAT_TOKEN")
