@@ -14,7 +14,7 @@ def analyze_code_with_codex(diff):
     """Analyzes code diff with the latest OpenAI model."""
     prompt = f"Review the following code changes and suggest improvements or fixes:\n\n{diff}"
     response = openai.ChatCompletion.create(
-        model="gpt-3.5-turbo",  # Use "gpt-3.5-turbo" if you prefer a less expensive option
+        model="gpt-4o",  # Use "gpt-3.5-turbo" if you prefer a less expensive option
         messages=[
             {"role": "system", "content": "You are an expert code reviewer."},
             {"role": "user", "content": prompt}
