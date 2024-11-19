@@ -18,7 +18,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install openai==0.28 requests
+          pip install openai requests
 
       - name: Run Codex Review
         env:
