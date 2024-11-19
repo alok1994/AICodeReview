@@ -9,5 +9,6 @@ Class B(A):
         self.secondName = secondName
         A.__init__(self, firstName)
 
+# Comments
 a = A()
 a.printName()
