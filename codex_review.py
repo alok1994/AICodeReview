@@ -4,7 +4,7 @@ import os
 def analyze_code_with_codex(diff):
     # Mocked response to simulate API call
     response = {
-        'choices': [{'message': {'content': 'Mocked response: Code review completed successfully.'}}]
+        'choices': [{'message': {'content': 'Mocked response: Code review completed successfully. with AI'}}]
     }
     return response['choices'][0]['message']['content']
 
