@@ -10,6 +10,6 @@ Class B(A):
         A.__init__(self, firstName)
 class C(B):
     def _init__(self):
-        
+        self.name = name
 a = A()
 a.printName()
